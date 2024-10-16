@@ -71,9 +71,8 @@ client.on('message', async (msg) => {
 
 client.initialize();
 
-const PORT = 3000;
-const HOST = 'localhost';
+const PORT = 4000;
 
-app.listen(PORT, HOST, () => {
-    console.log(`Servidor rodando em http://${HOST}:${PORT}`);
+app.listen(PORT, () => {
+    console.log(`Servidor rodando :${PORT}`);
 });
