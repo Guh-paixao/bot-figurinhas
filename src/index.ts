@@ -8,14 +8,22 @@ const client = new Client({
     authStrategy: new LocalAuth(),
 })
 
-client.on('qr', qr => {
-    qrcode.generate(qr, { small: true });
-})
+let isClientReady = false;
 
 client.on('ready', () => {
     console.log('Client is ready!');
-})
+    isClientReady = true;
+});
 
+const qrListener = (qr: any) => {
+    if (isClientReady) {
+        client.removeListener('qr', qrListener);
+    } else {
+        qrcode.generate(qr, { small: true });
+    }
+};
+
+client.on('qr', qrListener);
 
 const tempDir = path.join(__dirname, 'temp');
 if (!fs.existsSync(tempDir)) {
