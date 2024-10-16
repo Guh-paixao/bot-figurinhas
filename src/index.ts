@@ -4,6 +4,11 @@ import { Sticker, StickerTypes } from 'wa-sticker-formatter';
 import fs from 'fs';
 import path from 'path';
 
+import express from 'express';
+
+
+const app = express();
+
 const client = new Client({
     authStrategy: new LocalAuth(),
 })
@@ -65,3 +70,10 @@ client.on('message', async (msg) => {
 });
 
 client.initialize();
+
+const PORT = 3000;
+const HOST = 'localhost';
+
+app.listen(PORT, HOST, () => {
+    console.log(`Servidor rodando em http://${HOST}:${PORT}`);
+});
