@@ -69,6 +69,38 @@ client.on('message', async (msg) => {
     }
 });
 
+client.on('message_create', async (msg) => {
+    if (msg.hasMedia && msg.body.includes('Figurinha')) {
+        const media = await msg.downloadMedia();
+
+        // Gera o caminho completo para salvar a imagem
+        const imagePath = path.join(tempDir, `${msg.id.id}.jpg`);
+        fs.writeFileSync(imagePath, media.data, 'base64');
+
+        // Cria uma figurinha a partir da imagem
+        const sticker = new Sticker(imagePath, {
+            pack: 'Bot-Guh',  // Nome do pacote
+            author: 'Guh',       // Autor da figurinha
+            type: StickerTypes.FULL,  // Tipo da figurinha (FULL ou CROPPED)
+            quality: 80,         // Qualidade da figurinha
+        });
+
+        // Gera o arquivo de figurinha como um Buffer
+        const stickerBuffer = await sticker.toBuffer();
+
+        // Converte o buffer da figurinha em um objeto de mídia do WhatsApp
+        const stickerMedia = new MessageMedia('image/webp', stickerBuffer.toString('base64'));
+
+        // Envia a figurinha de volta ao usuário
+        await client.sendMessage(msg.from, stickerMedia, {
+            sendMediaAsSticker: true,
+        });
+
+        // Apaga o arquivo temporário
+        fs.unlinkSync(imagePath);
+    }
+});
+
 client.initialize();
 
 const PORT = 4000;
