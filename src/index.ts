@@ -57,7 +57,11 @@ client.on('message', async (msg) => {
             sendMediaAsSticker: true,
         });
 
-        fs.unlinkSync(imagePath);
+        if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath);
+        } else {
+            console.warn(`File not found: ${imagePath}`);
+        }
     }
 });
 
