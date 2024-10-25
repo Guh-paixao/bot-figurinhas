@@ -93,7 +93,7 @@ client.on('message_create', async (msg) => {
 
 client.initialize();
 
-const PORT = 4000;
+const PORT = 8080;
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando :${PORT}`);
